@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hello World</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+    <!-- Don't use this in production: -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+
+        em{
+            color: violet;
+        }
+        picture{
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+            width: 100px;
+        }
+
+        picture.isSmall{
+            width: 50px;
+        }
+
+        picture.isLarge{
+            width: 200px;
+        }
+
+        img {
+            box-shadow: 0 0 15px #999;
+            border-radius: 50%;
+        }
+
+        img.disabled{
+            opacity: 0.3;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Women in Tech</h1>
+    <div id="app">
+        
+    </div>
+</body>
+    <!--ya una vez agregada la libreria de babel en el scrip como se marca, ("solo para ejmplos de prueba 
+        en un proyecto mas serio no se debe realizar de esta manera.") para trabajar con JSX
+    debemos argegar en nuestro script donde agregaremos nuestros componentes react especificar que el atributo
+    type tendra un valor "text/label"-->
+  <script type="text/babel">
+      //constante para los eventos en react
+      const useState = React.useState;
+    
+    //aplicamos la destructuracion, en la funcion arrow y los valores que quedan le asignamos valor por defecto
+    const Avatar = ({ id, name = "👻", size}) =>{
+            /*la vraible que casi todas las imagenes de users tienen solo cambia el id*/
+            const src = `https://randomuser.me/api/portraits/women/${id}.jpg`;
+
+            /*desfracmentacion del obejcto React.useState al pasarle el valor de true
+            lo desfracmento y me quedo con dos constantes*/
+            const  [enabled, setEnabled] = useState(true);
+            const imgClassName = enabled ? "" : "disabled";
+
+            /*declaro mi varible className para el tag de picture de tipo let,
+            por que se modificara dependiendo de las condiciones*/
+            let pictureClassName;
+            if(size === "small"){
+                pictureClassName = "isSmall";
+            }else if(size === "large"){
+                pictureClassName = "isLarge";
+            }
+
+                    /*gracias a JSX ya podemos devolver codigo html sin tener que estar dentro de un string*/
+            return <picture className={pictureClassName}>
+            
+                {id ? (<img
+                    onClick={() => {
+                        setEnabled(!enabled);
+                    }}
+                    
+                    /*ahora podemos aplicar un renderizado por defecto en el caso que no vengan los valores*/
+                    src={src}
+                    className={imgClassName}
+                    />
+                    ) : (
+                        <img src="https://s1.qwant.com/thumbr/0x380/0/0/a8af59e2f710a86288d337911265d93e09bef014f6b4fc8a6b5f18e006a281/question-158453_960_720.png?u=https%3A%2F%2Fcdn.pixabay.com%2Fphoto%2F2013%2F07%2F13%2F11%2F35%2Fquestion-158453_960_720.png&q=0&b=1&p=0&a=0"/>
+                    )}
+                    
+                    <em>
+                        {name}
+                    </em>
+                </picture>;
+
+        }
+
+    /*recuperamos del DOM nuestro contenedor en el cual agregaremos los compoenentes react
+    que creamos*/
+      const container = document.getElementById('app');
+
+      /**/
+      const root = ReactDOM.createRoot(container);
+      /*los compoenens a renderiezar solo se pueden pasar uno, no se puede psar mas de uno,
+      porlo que podemos psar varios componentes a renderizar por medio de un componente que los agrupe
+      o tulizando el componente de React "React.Fragment"*/
+      root.render(
+      /*<div>
+      <Avatar id={32} size={"small"}/>,
+      <Avatar id={1} name={"camila"}/>,
+      <Avatar name={"lina"}/>
+    </div>*/
+    <React.Fragment>
+        <Avatar id={32} size={"small"}/>,
+        <Avatar id={1} name={"camila"}/>,
+        <Avatar name={"lina"}/>
+    </React.Fragment>    
+    );
+    </script>
+</html>
